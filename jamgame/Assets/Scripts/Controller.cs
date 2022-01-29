@@ -35,7 +35,7 @@ public class Controller : MonoBehaviour {
 			VerticalCollisions (ref velocity);
 		}
 
-		transform.Translate (velocity);
+		// transform.Translate (velocity);
 	}
 
 	void HorizontalCollisions(ref Vector3 velocity) {
