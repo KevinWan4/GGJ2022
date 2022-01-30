@@ -8,17 +8,17 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - GODPLATFORM
   - Water
   - UI
-  - 
-  - 
-  - 
   - Player
-  - Platform
   - 
   - 
   - 
+  - Platform0
+  - Platform1
+  - Platform2
+  - Platform3
   - 
   - 
   - 

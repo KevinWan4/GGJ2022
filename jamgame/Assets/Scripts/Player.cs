@@ -23,13 +23,14 @@ public class Player : MonoBehaviour
 	Controller controller;
 	TopDownController topDownController;
 
-	public float layer = 0;
+	public int layer = 0;
 	bool sideView = true;
 
 	void Start() {
 		layer = 2;
 		controller = GetComponent<Controller>();
 		topDownController = GetComponent<TopDownController>();
+		controller.updateLayer(layer);
 
 		gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -50,18 +51,16 @@ public class Player : MonoBehaviour
 		{
 			ShiftView(ref sideView);
 		}
-		Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-		if (sideView)
-		{
-			if (controller.collisions.above || controller.collisions.below)
-			{
+		
+		if (sideView) {
+			if (controller.collisions.above || controller.collisions.below) {
 				velocity.y = 0;
 			}
+			Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 			GiveToAryan(input);
 
 
-			if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below)
-			{
+			if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below) {
 				velocity.y = jumpVelocity;
 				animator.SetBool("isJumping", true);
 			}
@@ -71,22 +70,29 @@ public class Player : MonoBehaviour
 			velocity.y += gravity * Time.deltaTime;
 			controller.Move(velocity * Time.deltaTime);
 		}
-		else
-		{
-			topDownController.Move(input);
+		else {
+			Vector2 input = new Vector2(0, 0);
+			if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) input.y = -1;
+			if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) input.y = 1;
+			if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) input.x = -1;
+			if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) input.x = 1;
+			if (input.x != 0 || input.y != 0) topDownController.Move(input);
+			input.x = 0;
+			input.y = 0;
 		}
 	}
-	void ShiftView(ref bool sideView)
-	{
-		if (sideView)
-		{
+	void ShiftView(ref bool sideView) {
+		if (sideView) {
 			velocity = new Vector3(0, 0, 0);
 			topDownController.ConvertPosition();
+			sprite.sortingOrder = 5;
 			Camera.main.transform.position = new Vector3(0, -20, -10);
 		}
-		else
-		{
+		else {
+			layer = topDownController.ConvertBack();
+			controller.updateLayer(layer);
 			Camera.main.transform.position = new Vector3(0, 0, -10);
+			sprite.sortingOrder = layer;
 		}
 		sideView = !sideView;
 

@@ -77,6 +77,12 @@ public class Controller : MonoBehaviour {
 			}
 		}
 	}
+	public void updateLayer(int layer) {
+		//godplatform is 8
+		//0 = 1024, 1 = 2048, 2 = 4096
+		// print(collisionMask.value);
+		collisionMask.value = (1 << layer + 10) + 8;
+	}
 
 	void UpdateRaycastOrigins() {
 		Bounds bounds = collider.bounds;
