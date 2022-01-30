@@ -8,7 +8,7 @@ public class Controller : MonoBehaviour {
 
 	const float skinWidth = .015f;
 	public int horizontalRayCount = 4;
-	public int verticalRayCount = 4;
+	public int verticalRayCount = 1000;
 
 	float horizontalRaySpacing;
 	float verticalRaySpacing;

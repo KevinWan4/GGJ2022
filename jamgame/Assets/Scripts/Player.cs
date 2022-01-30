@@ -19,11 +19,11 @@ public class Player : MonoBehaviour {
 	Controller controller;
 	TopDownController topDownController;
 
-	float layers = 0;
+	public float layer = 0;
 	bool sideView = true;
 
 	void Start() {
-		controller = GetComponent<Controller> ();
+		controller = GetComponent<Controller>();
 		topDownController = GetComponent<TopDownController>();
 
 		gravity = -(2 * jumpHeight) / Mathf.Pow (timeToJumpApex, 2);
@@ -31,15 +31,18 @@ public class Player : MonoBehaviour {
 	}
 
 	void Update() {
+		Camera.main.orthographicSize = 10/Camera.main.aspect;
+		// print(Camera.main.orthographicSize);
+		//height of screen is size *2, width of screen is 10
+
 		if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) {
 			ShiftView(ref sideView);
 		}
+		Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
 		if (sideView) {
 			if (controller.collisions.above || controller.collisions.below) {
 				velocity.y = 0;
 			}
-
-			Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
 			GiveToAryan(input);
 			
 
@@ -52,11 +55,17 @@ public class Player : MonoBehaviour {
 			velocity.y += gravity * Time.deltaTime;
 			controller.Move (velocity * Time.deltaTime);
 		} else {
-			Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
-			// TopDownController.Move(input);
+			topDownController.Move(input);
 		}
 	}
 	void ShiftView(ref bool sideView) {
+		if (sideView) {
+			velocity = new Vector3(0,0,0);
+			topDownController.ConvertPosition();
+			Camera.main.transform.position = new Vector3(0, -20, -10);
+		} else {
+			Camera.main.transform.position = new Vector3(0, 0, -10);
+		}
 		sideView = !sideView;
 		
 	}
