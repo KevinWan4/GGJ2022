@@ -4,19 +4,18 @@ using UnityEngine;
  
 public class TopDownController : MonoBehaviour {
     public float[,] tileGrid;
-    float[,] swapGrid;
+
     Vector2 playerPosition = new Vector2(0,0);
-    Vector2 gridSize = new Vector2(4,4);
-    Vector2 topLeftPosition = new Vector2(-4, -18);
+    Vector2 gridSize = new Vector2(4f,4f);
+    Vector2 topLeftPosition = new Vector2(-7.95f, -17.8f);
 
     public float tileHeightScale = 1;
     void Start() {
  
         //coordinates are in y, x!!!
-        tileGrid = new float[3,3] {
-            {0, 0, -1},
-            {0, 5, -2},
-            {1, 5, 0}
+        tileGrid = new float[2,5] {
+            {0, 0, 0, 0, 0},
+            {0, 1, 0, 0, 0}
         };
     //    tileGrid = new float[3,20] {
     //        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -79,6 +78,13 @@ public class TopDownController : MonoBehaviour {
         
         transform.position = new Vector3(-9 + playerPosition.x * 18f/(tileGrid.GetLength(1)-1f), (float)0.75-3 + tileGrid[(int)playerPosition.y, (int)playerPosition.x]*tileHeightScale, 0);
         return (int)playerPosition.y;
+    }
+
+    public void nextLevel(string currentScene) {
+        //set tileGrid, gridSize, topLeftPosition
+        if (currentScene == "SampleScene") {
+
+        }
     }
  
    

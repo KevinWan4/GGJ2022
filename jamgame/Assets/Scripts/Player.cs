@@ -1,16 +1,23 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Controller))]
 [RequireComponent(typeof(TopDownController))]
 public class Player : MonoBehaviour
 {
 
+	[SerializeField] string newLevel;
+
 	public float jumpHeight = 4;
 	public float timeToJumpApex = .4f;
 	float accelerationTimeAirborne = .2f;
 	float accelerationTimeGrounded = .1f;
 	float moveSpeed = 6;
+
+	bool doorKey = false;
+	int doorLayer = 0;
+	int keyLayer = 0;
 
 	public Animator animator;
 	public SpriteRenderer sprite;
@@ -23,11 +30,11 @@ public class Player : MonoBehaviour
 	Controller controller;
 	TopDownController topDownController;
 
-	public int layer = 0;
+	public int layer;
 	bool sideView = true;
 
 	void Start() {
-		layer = 2;
+		layer = 1;
 		controller = GetComponent<Controller>();
 		topDownController = GetComponent<TopDownController>();
 		controller.updateLayer(layer);
@@ -36,10 +43,19 @@ public class Player : MonoBehaviour
 		jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
 	}
 
-	void Update()
-	{
-		if (controller.collisions.below)
-		{
+	void Update() {
+		//key
+		if ((Vector3.Distance(transform.position, GameObject.Find("id_card_side").transform.position) < 1 && layer == keyLayer) || Vector3.Distance(transform.position, GameObject.Find("id_card_top").transform.position) < 1 ) {
+			GameObject.Find("id_card_side").transform.position = new Vector3(1000, 1000, 0);
+			GameObject.Find("id_card_top").transform.position = new Vector3(1000, 1000, 0);
+			doorKey = true;
+		}
+		//door
+		if (doorKey && ((Vector3.Distance(transform.position, GameObject.Find("door_side").transform.position) < 1 && layer == doorLayer) || Vector3.Distance(transform.position, GameObject.Find("door_top").transform.position) < 1 )) {
+			topDownController.nextLevel(SceneManager.GetActiveScene().name);
+			SceneManager.LoadScene(newLevel);
+		}
+		if (controller.collisions.below) {
 			animator.SetBool("isJumping", false);
 		}
 
