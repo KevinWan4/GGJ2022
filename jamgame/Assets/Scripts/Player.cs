@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-//ok so this is how it is
+
 [RequireComponent (typeof (Controller))]
 [RequireComponent (typeof(TopDownController))]
 public class Player : MonoBehaviour {
