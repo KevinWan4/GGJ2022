@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-//this is local
 [RequireComponent (typeof (Controller))]
 [RequireComponent (typeof(TopDownController))]
 public class Player : MonoBehaviour {
