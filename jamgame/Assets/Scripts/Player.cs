@@ -26,8 +26,8 @@ public class Player : MonoBehaviour
 	public float layer = 0;
 	bool sideView = true;
 
-	void Start()
-	{
+	void Start() {
+		layer = 2;
 		controller = GetComponent<Controller>();
 		topDownController = GetComponent<TopDownController>();
 
